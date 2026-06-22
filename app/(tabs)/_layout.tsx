@@ -59,9 +59,14 @@ export default function TabLayout() {
         options={{
           title: "Menu",
           tabBarIcon: ({ color, focused }) => (
-            <MaterialIcons
-              name="menu-book"
-              size={focused ? 30 : 26}
+            // <MaterialIcons
+            //   name="menu-book"
+            //   size={focused ? 30 : 26}
+            //   color={color}
+            // />
+            <FontAwesome
+              name="cutlery"
+              size={focused ? 28 : 24}
               color={color}
             />
           ),
