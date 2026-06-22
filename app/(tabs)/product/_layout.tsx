@@ -6,7 +6,7 @@ const ProductLayout = () => {
   return (
     <Stack
       screenOptions={{
-        headerShown: false,
+        // headerShown: false,
         animation: Platform.OS === "android" ? "slide_from_right" : "default",
       }}
     />
