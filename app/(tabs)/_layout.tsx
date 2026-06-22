@@ -1,10 +1,13 @@
 import { Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PRIMARY = "#F97316"; // Orange
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
@@ -23,7 +26,10 @@ export default function TabLayout() {
           position: "absolute",
           left: 16,
           right: 16,
-          bottom: 16,
+
+          // Add safe area
+          bottom: insets.bottom + 16,
+
           height: 70,
 
           borderRadius: 40,
