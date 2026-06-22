@@ -54,10 +54,10 @@ export default function TabLayout() {
         },
       }}
     >
-      <Tabs.Screen name="product" options={{ href: null }} />
+      <Tabs.Screen name="index" options={{ href: null }} />
 
       <Tabs.Screen
-        name="index"
+        name="product"
         options={{
           title: "Menu",
           tabBarIcon: ({ color, focused }) => (
