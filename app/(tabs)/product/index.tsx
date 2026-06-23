@@ -17,13 +17,6 @@ const MenuPage = () => {
       <Stack.Screen
         options={{
           title: "Menu",
-          headerRight: () => (
-            <TouchableOpacity>
-              <Link href="/cart">
-                <FontAwesome name="shopping-cart" size={24} color="#F97316" />
-              </Link>
-            </TouchableOpacity>
-          ),
         }}
       />
 
