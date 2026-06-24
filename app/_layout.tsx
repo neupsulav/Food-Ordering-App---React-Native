@@ -7,7 +7,11 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <CartProvider>
-        <Stack screenOptions={{ statusBarStyle: "dark" }}>
+        <Stack
+          initialRouteName="index"
+          screenOptions={{ statusBarStyle: "dark" }}
+        >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(user)" options={{ headerShown: false }} />
           <Stack.Screen name="(admin)" options={{ headerShown: false }} />
           <Stack.Screen

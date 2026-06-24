@@ -4,11 +4,16 @@ import { View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
-  // return <Redirect href="/(admin)" />;
 
-  // buttons to redirect to either user menu or admin menu
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+      }}
+    >
       <ButtonComponent
         text="User Menu"
         onPress={() => router.push("/(user)")}
