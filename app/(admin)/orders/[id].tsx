@@ -4,6 +4,7 @@ import orders from "@/assets/data/orders";
 import OrderListItem from "@/components/OrderListItem";
 import OrderItemListItem from "@/components/OrderItemListItem";
 import { OrderStatusList } from "@/types";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const OrderDetailScreen = () => {
   const { id } = useLocalSearchParams();
@@ -19,7 +20,7 @@ const OrderDetailScreen = () => {
   }
 
   return (
-    <View className="flex-1 gap-3 p-3">
+    <SafeAreaView className="flex-1 gap-3 p-3" edges={["top"]}>
       <Stack.Screen options={{ title: `Order #${order.id}` }} />
 
       <OrderListItem order={order} />
@@ -61,7 +62,7 @@ const OrderDetailScreen = () => {
           </>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
