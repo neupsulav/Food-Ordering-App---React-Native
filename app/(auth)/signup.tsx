@@ -1,3 +1,4 @@
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,13 +19,24 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secure, setSecure] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const handleSignUp = () => {
-    console.log({
-      fullName,
+  const handleSignUp = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
+      },
     });
+
+    if (error) {
+      Alert.alert(error.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -104,9 +117,10 @@ const SignUpPage = () => {
               <TouchableOpacity
                 onPress={handleSignUp}
                 className="bg-blue-600 rounded-2xl py-4 items-center mt-2"
+                disabled={loading}
               >
                 <Text className="text-white font-bold text-base">
-                  Create Account
+                  {loading ? "Creating Account..." : "Create Account"}
                 </Text>
               </TouchableOpacity>
             </View>
