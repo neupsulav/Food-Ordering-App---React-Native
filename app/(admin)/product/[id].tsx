@@ -1,11 +1,12 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import products from "@/assets/data/products";
 import ImagePaths from "@/constants/ImagePaths";
 import ButtonComponent from "@/components/ButtonComponent";
 import { useCart } from "@/providers/CartProvider";
 import { PizzaSize } from "@/types";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 // pizza sizes
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
@@ -40,7 +41,18 @@ const ProductDetailsScreen = () => {
   return (
     <View className="flex-1 p-2">
       {/* for naming the header of the page */}
-      <Stack.Screen options={{ title: product?.name }} />
+      <Stack.Screen
+        options={{
+          title: product?.name,
+          headerRight: () => (
+            <TouchableOpacity>
+              <Link href="/(admin)/product/edit">
+                <FontAwesome name="pencil" size={24} color="#F97316" />
+              </Link>
+            </TouchableOpacity>
+          ),
+        }}
+      />
 
       {/* image of product */}
       <Image
@@ -49,26 +61,13 @@ const ProductDetailsScreen = () => {
         resizeMode="contain"
       />
 
-      <Text className="font-bold text-lg ">Select Size</Text>
-
-      <View className="flex-row justify-center items-center">
-        {sizes.map((size) => (
-          <View key={size} className="items-center justify-center mx-6 mt-6">
-            <Text
-              className={`w-12 h-12 bg-gray-200 font-bold text-center border border-gray-300 rounded-full p-2 m-1 ${selectedSize === size ? "bg-orange-500 text-white" : ""}`}
-              onPress={() => setSelectedSize(size)}
-            >
-              {size}
-            </Text>
-          </View>
-        ))}
-      </View>
-
-      <Text className="font-bold text-xl mt-4 text-center">
-        ${product?.price}
+      <Text className="font-bold text-2xl mt-4 text-center">
+        ${product?.name}
       </Text>
 
-      <ButtonComponent text="Add to Cart" onPress={onAddToCart} />
+      <Text className="font-semibold text-xl mt-4 text-center">
+        ${product?.price}
+      </Text>
     </View>
   );
 };

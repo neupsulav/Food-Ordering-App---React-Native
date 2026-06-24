@@ -9,13 +9,6 @@ const ProductLayout = () => {
       screenOptions={{
         // headerShown: false,
         animation: Platform.OS === "android" ? "slide_from_right" : "default",
-        headerRight: () => (
-          <TouchableOpacity>
-            <Link href="/cart">
-              <FontAwesome name="shopping-cart" size={24} color="#F97316" />
-            </Link>
-          </TouchableOpacity>
-        ),
       }}
     />
   );
