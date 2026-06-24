@@ -16,6 +16,7 @@
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/material-top-tabs": "^7.6.3",
     "@react-navigation/native": "^7.1.8",
+    "@supabase/supabase-js": "^2.108.2",
     "babel-preset-expo": "~54.0.10",
     "dayjs": "^1.11.21",
     "expo": "~54.0.34",
@@ -28,6 +29,7 @@
     "expo-linking": "~8.0.12",
     "expo-router": "~6.0.23",
     "expo-splash-screen": "~31.0.13",
+    "expo-sqlite": "~16.0.10",
     "expo-status-bar": "~3.0.9",
     "expo-symbols": "~1.0.8",
     "expo-system-ui": "~6.0.9",
@@ -42,6 +44,7 @@
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
+    "react-native-url-polyfill": "^3.0.0",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.5.1",
     "tailwindcss": "^3.4.19"
