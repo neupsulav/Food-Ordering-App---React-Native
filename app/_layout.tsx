@@ -8,7 +8,8 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <CartProvider>
         <Stack screenOptions={{ statusBarStyle: "dark" }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(user)" options={{ headerShown: false }} />
+          <Stack.Screen name="(admin)" options={{ headerShown: false }} />
           <Stack.Screen
             name="cart"
             options={{
