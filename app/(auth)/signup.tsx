@@ -35,8 +35,13 @@ const SignUpPage = () => {
 
     if (error) {
       Alert.alert(error.message);
+      setLoading(false);
+      return;
     }
+
+    Alert.alert("Account created successfully. Please proceed to login");
     setLoading(false);
+    router.push("/(auth)");
   };
 
   return (
