@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import ButtonComponent from "@/components/ButtonComponent";
 import ImagePaths from "@/constants/ImagePaths";
 import * as ImagePicker from "expo-image-picker";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const CreateProductScreen = () => {
+  const { id } = useLocalSearchParams();
+  const isUpdating = !!id;
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
@@ -75,6 +79,26 @@ const CreateProductScreen = () => {
     setPrice("");
   };
 
+  const onSubmit = () => {
+    if (isUpdating) {
+      // update product
+      onUpdate();
+    } else {
+      // create product
+      onCreate();
+    }
+  };
+
+  const onUpdate = () => {
+    if (!validateInputs()) {
+      return;
+    }
+
+    console.log("Name: ", name);
+    console.log("Price: ", price);
+    resetValues();
+  };
+
   const onCreate = () => {
     if (!validateInputs()) {
       return;
@@ -85,9 +109,34 @@ const CreateProductScreen = () => {
     resetValues();
   };
 
+  const onDelete = () => {
+    console.log("Delete product");
+  };
+
+  const confirmDelete = () => {
+    Alert.alert(
+      "Delete Product",
+      "Are you sure you want to delete this product?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: onDelete },
+      ],
+    );
+  };
+
   return (
     <View className="p-4 flex-1 justify-start ">
-      <Stack.Screen options={{ title: "Create Product" }} />
+      <Stack.Screen
+        options={{ title: isUpdating ? "Edit Product" : "Create Product" }}
+      />
+
+      <TouchableOpacity
+        onPress={confirmDelete}
+        activeOpacity={0.8}
+        className="w-full items-end"
+      >
+        <FontAwesome name="trash" size={30} color="#F97316" />
+      </TouchableOpacity>
 
       <Image
         source={{ uri: image || ImagePaths.defaultImage }}
@@ -116,7 +165,10 @@ const CreateProductScreen = () => {
         onChangeText={setPrice}
       />
       {error && <Text className="text-red-500">{error}</Text>}
-      <ButtonComponent text="Create" onPress={() => onCreate()} />
+      <ButtonComponent
+        text={isUpdating ? "Update" : "Create"}
+        onPress={() => onSubmit()}
+      />
     </View>
   );
 };

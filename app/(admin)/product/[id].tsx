@@ -46,7 +46,7 @@ const ProductDetailsScreen = () => {
           title: product?.name,
           headerRight: () => (
             <TouchableOpacity>
-              <Link href="/(admin)/product/edit">
+              <Link href={`/(admin)/product/create?id=${id}`}>
                 <FontAwesome name="pencil" size={24} color="#F97316" />
               </Link>
             </TouchableOpacity>
