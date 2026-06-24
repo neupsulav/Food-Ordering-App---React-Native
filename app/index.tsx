@@ -22,6 +22,10 @@ export default function Index() {
         text="Admin Menu"
         onPress={() => router.push("/(admin)")}
       />
+      <ButtonComponent
+        text="Auth Menu"
+        onPress={() => router.push("/(auth)")}
+      />
     </View>
   );
 }
