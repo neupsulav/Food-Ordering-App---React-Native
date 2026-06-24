@@ -15,6 +15,13 @@ export type CartItem = {
   size: PizzaSize;
 };
 
+export const OrderStatusList: OrderStatus[] = [
+  "New",
+  "Cooking",
+  "Delivering",
+  "Delivered",
+];
+
 export type OrderStatus = "New" | "Cooking" | "Delivering" | "Delivered";
 
 export type Order = {

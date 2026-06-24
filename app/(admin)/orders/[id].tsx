@@ -1,8 +1,9 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Pressable } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import orders from "@/assets/data/orders";
 import OrderListItem from "@/components/OrderListItem";
 import OrderItemListItem from "@/components/OrderItemListItem";
+import { OrderStatusList } from "@/types";
 
 const OrderDetailScreen = () => {
   const { id } = useLocalSearchParams();
@@ -29,6 +30,36 @@ const OrderDetailScreen = () => {
         renderItem={({ item }) => <OrderItemListItem item={item} />}
         contentContainerClassName="gap-3"
         showsVerticalScrollIndicator={false}
+        ListFooterComponent={() => (
+          <>
+            <Text style={{ fontWeight: "bold" }}>Status</Text>
+            <View style={{ flexDirection: "row", gap: 5 }}>
+              {OrderStatusList.map((status) => (
+                <Pressable
+                  key={status}
+                  onPress={() => console.warn("Update status")}
+                  style={{
+                    borderColor: "#1a92e2ff",
+                    borderWidth: 1,
+                    padding: 10,
+                    borderRadius: 5,
+                    marginVertical: 10,
+                    backgroundColor:
+                      order.status === status ? "#1a92e2ff" : "transparent",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: order.status === status ? "white" : "#1a92e2ff",
+                    }}
+                  >
+                    {status}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </>
+        )}
       />
     </View>
   );
