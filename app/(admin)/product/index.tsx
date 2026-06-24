@@ -19,7 +19,7 @@ const MenuPage = () => {
           title: "Menu",
           headerRight: () => (
             <TouchableOpacity>
-              <Link href="/(admin)/product/add">
+              <Link href="/(admin)/product/create">
                 <FontAwesome name="plus-square-o" size={24} color="#F97316" />
               </Link>
             </TouchableOpacity>
