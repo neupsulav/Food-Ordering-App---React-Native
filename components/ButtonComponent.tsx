@@ -10,6 +10,7 @@ const ButtonComponent = ({
 }) => {
   return (
     <TouchableOpacity
+      activeOpacity={0.8}
       className="bg-orange-500 p-4 rounded-full items-center justify-center mt-6"
       onPress={onPress}
     >
