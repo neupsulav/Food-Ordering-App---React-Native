@@ -1,22 +1,9 @@
+import { View, Text } from "react-native";
 import React from "react";
-import { FlatList, Text, View } from "react-native";
-import orders from "@/assets/data/orders";
-import OrderListItem from "@/components/OrderListItem";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Stack } from "expo-router";
+import { Redirect } from "expo-router";
 
-const OrdersPage = () => {
-  return (
-    <SafeAreaView>
-      <Stack.Screen options={{ headerShown: true, title: "Orders" }} />
-      <FlatList
-        data={orders}
-        renderItem={({ item }) => <OrderListItem order={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ gap: 10, padding: 10 }}
-      />
-    </SafeAreaView>
-  );
+const index = () => {
+  return <Redirect href="/orders/list/" />;
 };
 
-export default OrdersPage;
+export default index;

@@ -3,7 +3,7 @@ import React from "react";
 import { Stack } from "expo-router";
 
 const OrdersLayout = () => {
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 };
 
 export default OrdersLayout;
