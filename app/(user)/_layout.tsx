@@ -1,12 +1,23 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/providers/AuthProvider";
+import { ActivityIndicator } from "react-native";
 
-const PRIMARY = "#F97316"; // Orange
+const PRIMARY = "#F97316";
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  if (!session) {
+    return <Redirect href="/(auth)" />;
+  }
 
   return (
     <Tabs

@@ -1,8 +1,16 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { Stack } from "expo-router";
+import React, { useEffect } from "react";
+import { Redirect, Stack } from "expo-router";
+import { useAuth } from "@/providers/AuthProvider";
 
 const AuthLayout = () => {
+  const { session } = useAuth();
+
+  useEffect(() => {
+    if (session) {
+      <Redirect href={"/"} />;
+    }
+  }, [session]);
+
   return (
     <Stack>
       <Stack.Screen
