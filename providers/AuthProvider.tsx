@@ -25,12 +25,9 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const fetchSession = async () => {
       // to fetch supabase session
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
 
-      setSession(session);
+      setSession(data.session);
       setLoading(false);
     };
 

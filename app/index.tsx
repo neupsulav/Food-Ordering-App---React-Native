@@ -13,7 +13,7 @@ export default function Index() {
   }
 
   if (!session) {
-    return <Redirect href={"/(auth)"} />;
+    return <Redirect href={"/(auth)/signin"} />;
   }
 
   return (
@@ -35,7 +35,7 @@ export default function Index() {
       />
       <ButtonComponent
         text="Auth Menu"
-        onPress={() => router.push("/(auth)")}
+        onPress={() => router.push("/(auth)/signin")}
       />
       <ButtonComponent
         text="Sign Out"
