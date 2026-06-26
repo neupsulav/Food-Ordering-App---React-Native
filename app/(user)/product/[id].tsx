@@ -1,24 +1,26 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import products from "@/assets/data/products";
 import ImagePaths from "@/constants/ImagePaths";
 import ButtonComponent from "@/components/ButtonComponent";
 import { useCart } from "@/providers/CartProvider";
 import { PizzaSize } from "@/types";
+import { useProduct } from "@/api/products";
 
 // pizza sizes
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
 const ProductDetailsScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
+
   const { addItem } = useCart();
   const router = useRouter();
 
+  const { data: product, isLoading, error } = useProduct(id);
+
   // state to store the selected size
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
-
-  const product = products.find((p) => p.id === Number(id));
 
   const onAddToCart = () => {
     if (!product) return;
@@ -28,12 +30,15 @@ const ProductDetailsScreen = () => {
     router.push("/cart");
   };
 
-  if (!product) {
+  if (isLoading) {
+    return <ActivityIndicator className="flex-1 justify-center items-center" />;
+  }
+
+  if (error) {
     return (
-      <View>
-        <Stack.Screen options={{ title: "Product Not Found" }} />
-        <Text>Product Not Found</Text>
-      </View>
+      <Text className="flex-1 justify-center items-center">
+        {error.message}
+      </Text>
     );
   }
 

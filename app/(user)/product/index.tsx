@@ -1,15 +1,34 @@
 import React from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import products from "@/assets/data/products";
 import ProductListItem from "@/components/ProductListItem";
-import { Link, Stack } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-
-// const product = products[0];
+import { Stack } from "expo-router";
+import { useProductsList } from "@/api/products";
 
 const MenuPage = () => {
   const insets = useSafeAreaInsets();
+
+  const { data: products, isLoading, error } = useProductsList();
+
+  if (isLoading) {
+    return <ActivityIndicator className="flex-1 justify-center items-center" />;
+  }
+
+  if (error) {
+    return (
+      <Text className="flex-1 justify-center items-center">
+        {error.message}
+      </Text>
+    );
+  }
+
+  if (!products || products.length === 0) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-center">No products found</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-gray-50">

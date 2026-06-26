@@ -6,16 +6,40 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import ButtonComponent from "@/components/ButtonComponent";
 import ImagePaths from "@/constants/ImagePaths";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {
+  useDeleteProduct,
+  useInsertProduct,
+  useProduct,
+  useUpdateProduct,
+} from "@/api/products";
 
 const CreateProductScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(
+    typeof idString === "string" ? idString : idString?.[0],
+  );
   const isUpdating = !!id;
+
+  const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { data: product } = useProduct(id);
+  const { mutate: deleteProduct } = useDeleteProduct();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setPrice(product.price.toString());
+      setImage(product.image);
+    }
+  }, [product]);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -94,9 +118,15 @@ const CreateProductScreen = () => {
       return;
     }
 
-    console.log("Name: ", name);
-    console.log("Price: ", price);
-    resetValues();
+    updateProduct(
+      { id, name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetValues();
+          router.back();
+        },
+      },
+    );
   };
 
   const onCreate = () => {
@@ -104,13 +134,24 @@ const CreateProductScreen = () => {
       return;
     }
 
-    console.log("Name: ", name);
-    console.log("Price: ", price);
-    resetValues();
+    insertProduct(
+      { name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetValues();
+          router.back();
+        },
+      },
+    );
   };
 
   const onDelete = () => {
-    console.log("Delete product");
+    deleteProduct(id, {
+      onSuccess: () => {
+        resetValues();
+        router.replace("/(admin)/product");
+      },
+    });
   };
 
   const confirmDelete = () => {
@@ -130,13 +171,15 @@ const CreateProductScreen = () => {
         options={{ title: isUpdating ? "Edit Product" : "Create Product" }}
       />
 
-      <TouchableOpacity
-        onPress={confirmDelete}
-        activeOpacity={0.8}
-        className="w-full items-end"
-      >
-        <FontAwesome name="trash" size={30} color="#F97316" />
-      </TouchableOpacity>
+      {isUpdating && (
+        <TouchableOpacity
+          onPress={confirmDelete}
+          activeOpacity={0.8}
+          className="w-full items-end"
+        >
+          <FontAwesome name="trash" size={30} color="#F97316" />
+        </TouchableOpacity>
+      )}
 
       <Image
         source={{ uri: image || ImagePaths.defaultImage }}

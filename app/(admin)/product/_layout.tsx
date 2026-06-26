@@ -8,7 +8,8 @@ const ProductLayout = () => {
     <Stack
       screenOptions={{
         // headerShown: false,
-        animation: Platform.OS === "android" ? "slide_from_right" : "default",
+        // animation: Platform.OS === "android" ? "slide_from_right" : "default",
+        animation: "slide_from_right",
       }}
     />
   );
