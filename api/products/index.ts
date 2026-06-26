@@ -20,7 +20,7 @@ export const useProductsList = () => {
 };
 
 // fetch single product details
-export const useProduct = (id: string | number) => {
+export const useProduct = (id: number) => {
   return useQuery({
     queryKey: ["products", id],
     queryFn: async () => {
@@ -92,7 +92,7 @@ export const useUpdateProduct = () => {
 export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: string | number) => {
+    mutationFn: async (id: number) => {
       const { data, error } = await supabase
         .from("products")
         .delete()

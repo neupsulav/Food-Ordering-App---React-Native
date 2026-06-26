@@ -36,14 +36,16 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
       setSession(session);
 
-      // fetch profile details from profiles table
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session?.user.id)
-        .single();
+      if (session) {
+        // fetch profile details from profiles table
+        const { data } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
 
-      setProfile(data || null);
+        setProfile(data || null);
+      }
 
       setLoading(false);
     };
