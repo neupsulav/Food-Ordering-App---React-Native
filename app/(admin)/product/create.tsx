@@ -26,10 +26,11 @@ const CreateProductScreen = () => {
   );
   const isUpdating = !!id;
 
-  const { mutate: insertProduct } = useInsertProduct();
-  const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: insertProduct, isPending: isInserting } = useInsertProduct();
+  const { mutate: updateProduct, isPending: isUpdatingProduct } =
+    useUpdateProduct();
   const { data: product } = useProduct(id);
-  const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct();
 
   const router = useRouter();
 
@@ -211,6 +212,7 @@ const CreateProductScreen = () => {
       <ButtonComponent
         text={isUpdating ? "Update" : "Create"}
         onPress={() => onSubmit()}
+        disabled={isInserting || isUpdatingProduct || isDeleting}
       />
     </View>
   );
