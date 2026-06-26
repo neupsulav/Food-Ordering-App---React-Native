@@ -1,12 +1,18 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/providers/AuthProvider";
 
 const PRIMARY = "#ffffff"; // Orange
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const { isAdmin } = useAuth();
+
+  if (!isAdmin) {
+    return <Redirect href={"/(user)"} />;
+  }
 
   return (
     <Tabs

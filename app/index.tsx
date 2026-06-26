@@ -6,7 +6,7 @@ import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
-  const { session, loading } = useAuth();
+  const { session, loading, isAdmin } = useAuth();
 
   if (loading) {
     return <ActivityIndicator />;
@@ -14,6 +14,10 @@ export default function Index() {
 
   if (!session) {
     return <Redirect href={"/(auth)/signin"} />;
+  }
+
+  if (!isAdmin) {
+    return <Redirect href={"/(user)"} />;
   }
 
   return (
@@ -33,10 +37,10 @@ export default function Index() {
         text="Admin Menu"
         onPress={() => router.push("/(admin)")}
       />
-      <ButtonComponent
+      {/* <ButtonComponent
         text="Auth Menu"
         onPress={() => router.push("/(auth)/signin")}
-      />
+      /> */}
       <ButtonComponent
         text="Sign Out"
         onPress={() => supabase.auth.signOut()}
