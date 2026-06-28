@@ -7,7 +7,7 @@ import ButtonComponent from "@/components/ButtonComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const CartScreen = () => {
-  const { items, total } = useCart();
+  const { items, total, checkout } = useCart();
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
@@ -33,7 +33,7 @@ const CartScreen = () => {
             </Text>
           </View>
 
-          <ButtonComponent text="Checkout" onPress={() => {}} />
+          <ButtonComponent text="Checkout" onPress={checkout} />
         </View>
       )}
     </SafeAreaView>

@@ -1,27 +1,40 @@
-import { View, Text, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import orders from "@/assets/data/orders";
 import OrderListItem from "@/components/OrderListItem";
 import OrderItemListItem from "@/components/OrderItemListItem";
 import { OrderStatusList } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useOrderDetails, useUpdateOrderStatus } from "@/api/orders";
 
 const OrderDetailScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
 
-  const order = orders.find((o) => o.id.toString() === id);
+  const { data: order, isLoading, error } = useOrderDetails(Number(id));
+  const { mutate: updateOrderStatus } = useUpdateOrderStatus();
 
-  if (!order) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <Text className="text-base text-red-500">Order not found!</Text>
-      </View>
-    );
+  const handleUpdateStatus = (status: string) => {
+    updateOrderStatus({ id: Number(id), status });
+  };
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error || !order) {
+    return <Text>Error: {error?.message}</Text>;
   }
 
   return (
     <SafeAreaView className="flex-1 gap-3 p-3" edges={["top"]}>
-      <Stack.Screen options={{ title: `Order #${order.id}` }} />
+      <Stack.Screen options={{ title: `Order #${id}` }} />
 
       <OrderListItem order={order} />
 
@@ -38,7 +51,7 @@ const OrderDetailScreen = () => {
               {OrderStatusList.map((status) => (
                 <Pressable
                   key={status}
-                  onPress={() => console.warn("Update status")}
+                  onPress={() => handleUpdateStatus(status)}
                   style={{
                     borderColor: "#1a92e2ff",
                     borderWidth: 1,
