@@ -4,12 +4,15 @@ import orders from "@/assets/data/orders";
 import OrderListItem from "@/components/OrderListItem";
 import OrderItemListItem from "@/components/OrderItemListItem";
 import { useOrderDetails } from "@/api/orders";
+import { useUpdateOrdersSubscription } from "@/api/orders/subscription";
 
 const OrderDetailScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
 
   const { data: order, isLoading, error } = useOrderDetails(Number(id));
+
+  useUpdateOrdersSubscription(Number(id));
 
   if (isLoading) {
     return <ActivityIndicator />;

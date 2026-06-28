@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import orders from "@/assets/data/orders";
 import OrderListItem from "@/components/OrderListItem";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
 import { useAdminOrdersList } from "@/api/orders";
+import { useInsertOrdersSubscription } from "@/api/orders/subscription";
 
 const OrdersPage = () => {
   const {
@@ -12,6 +13,8 @@ const OrdersPage = () => {
     isLoading,
     error,
   } = useAdminOrdersList({ archived: false });
+
+  useInsertOrdersSubscription();
 
   if (isLoading) {
     return <ActivityIndicator />;
