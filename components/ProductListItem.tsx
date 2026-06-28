@@ -1,11 +1,11 @@
 import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import React from "react";
-import { Product } from "@/types";
+import { Tables } from "@/types";
 import ImagePaths from "@/constants/ImagePaths";
 import { Link, useRouter } from "expo-router";
 
 type ProductListItemProps = {
-  product: Product;
+  product: Tables<"products">;
 };
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
