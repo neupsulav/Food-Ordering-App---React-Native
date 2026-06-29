@@ -1,6 +1,8 @@
 import { registerForPushNotificationsAsync } from "@/lib/notifications";
 import { PropsWithChildren, useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "./AuthProvider";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -12,6 +14,8 @@ Notifications.setNotificationHandler({
 });
 
 const NotificationProvider = ({ children }: PropsWithChildren) => {
+  const { profile } = useAuth();
+
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
@@ -20,7 +24,9 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token ?? ""))
-      .catch((error: any) => setExpoPushToken(`${error}`));
+      .catch((error: any) => {
+        console.log("Failed to register push notifications:", error);
+      });
 
     const notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
@@ -38,6 +44,29 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
       responseListener.remove();
     };
   }, []);
+
+  useEffect(() => {
+    if (!expoPushToken || !profile?.id) {
+      return;
+    }
+
+    const savePushToken = async () => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          expo_push_token: expoPushToken,
+        })
+        .eq("id", profile.id);
+
+      if (error) {
+        console.error("Error saving push token to Supabase:", error.message);
+      } else {
+        console.log("Push token successfully saved to Supabase.");
+      }
+    };
+
+    savePushToken();
+  }, [expoPushToken, profile?.id]);
 
   console.log("push token:", expoPushToken);
   console.log("notification:", notification);

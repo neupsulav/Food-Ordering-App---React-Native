@@ -20,7 +20,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.neupsulav.FoodOrderingApp"
+      "package": "com.neupsulav.FoodOrderingApp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -41,7 +42,8 @@
           }
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": true,

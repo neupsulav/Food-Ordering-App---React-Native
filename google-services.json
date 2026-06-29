@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "135450117345",
+    "project_id": "food-ordering-app-a642f",
+    "storage_bucket": "food-ordering-app-a642f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135450117345:android:ae446a56804af0553ee3a0",
+        "android_client_info": {
+          "package_name": "com.neupsulav.FoodOrderingApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6UpnyQzTTDCj7oJeoysptqLw9qkANXhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
