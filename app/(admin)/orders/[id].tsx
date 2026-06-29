@@ -12,6 +12,7 @@ import OrderItemListItem from "@/components/OrderItemListItem";
 import { OrderStatusList } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useOrderDetails, useUpdateOrderStatus } from "@/api/orders";
+import { notifyUserAboutOrderUpdate } from "@/lib/notifications";
 
 const OrderDetailScreen = () => {
   const { id: idString } = useLocalSearchParams();
@@ -22,6 +23,10 @@ const OrderDetailScreen = () => {
 
   const handleUpdateStatus = (status: string) => {
     updateOrderStatus({ id: Number(id), status });
+
+    if (order) {
+      notifyUserAboutOrderUpdate(order);
+    }
   };
 
   if (isLoading) {
