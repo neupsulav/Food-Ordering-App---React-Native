@@ -10,6 +10,7 @@ import { Link, Stack, useLocalSearchParams } from "expo-router";
 import ImagePaths from "@/constants/ImagePaths";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useProduct } from "@/api/products";
+import RemoteImage from "@/components/RemoteImage";
 
 const ProductDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
@@ -46,8 +47,14 @@ const ProductDetailsScreen = () => {
       />
 
       {/* image of product */}
-      <Image
+      {/* <Image
         source={{ uri: product?.image || ImagePaths.defaultImage }}
+        className="mt-6 w-full aspect-square rounded-xl"
+        resizeMode="contain"
+      /> */}
+      <RemoteImage
+        path={product?.image}
+        fallback={ImagePaths.defaultImage}
         className="mt-6 w-full aspect-square rounded-xl"
         resizeMode="contain"
       />

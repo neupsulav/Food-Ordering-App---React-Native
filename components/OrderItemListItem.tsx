@@ -3,6 +3,7 @@ import React from "react";
 import { OrderItem } from "../types";
 import ImagePaths from "@/constants/ImagePaths";
 import { Tables } from "@/database.types";
+import RemoteImage from "./RemoteImage";
 
 type OrderItemListItemProps = {
   item: Tables<"order_items"> & { products: Tables<"products"> };
@@ -11,8 +12,15 @@ type OrderItemListItemProps = {
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
   return (
     <View className="flex-row items-center rounded-xl bg-white p-2">
-      <Image
+      {/* <Image
         source={{ uri: item.products.image || ImagePaths.defaultImage }}
+        className="mr-3 h-[75px] w-[75px]"
+        resizeMode="contain"
+      /> */}
+
+      <RemoteImage
+        path={item.products.image}
+        fallback={ImagePaths.defaultImage}
         className="mr-3 h-[75px] w-[75px]"
         resizeMode="contain"
       />

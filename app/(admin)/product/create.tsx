@@ -18,6 +18,11 @@ import {
   useProduct,
   useUpdateProduct,
 } from "@/api/products";
+import { supabase } from "@/lib/supabase";
+import { randomUUID } from "expo-crypto";
+import * as FileSystem from "expo-file-system/legacy";
+import * as ImageManipulator from "expo-image-manipulator";
+import { decode } from "base64-arraybuffer";
 
 const CreateProductScreen = () => {
   const { id: idString } = useLocalSearchParams();
@@ -66,10 +71,9 @@ const CreateProductScreen = () => {
       quality: 1,
     });
 
-    // console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const asset = result.assets[0];
+      setImage(asset.uri);
     }
   };
 
@@ -102,25 +106,38 @@ const CreateProductScreen = () => {
   const resetValues = () => {
     setName("");
     setPrice("");
+    setImage(null);
   };
 
   const onSubmit = () => {
     if (isUpdating) {
-      // update product
       onUpdate();
     } else {
-      // create product
       onCreate();
     }
   };
 
-  const onUpdate = () => {
+  const onUpdate = async () => {
     if (!validateInputs()) {
       return;
     }
 
+    let imagePath = image;
+
+    // Check if image has changed (is a local file URI)
+    if (image && image.startsWith("file://")) {
+      imagePath = await uploadImage();
+      if (!imagePath) {
+        Alert.alert(
+          "Upload Failed",
+          "Failed to upload image. Please try again.",
+        );
+        return;
+      }
+    }
+
     updateProduct(
-      { id, name, price: parseFloat(price), image },
+      { id, name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           resetValues();
@@ -130,13 +147,21 @@ const CreateProductScreen = () => {
     );
   };
 
-  const onCreate = () => {
+  const onCreate = async () => {
     if (!validateInputs()) {
       return;
     }
 
+    const imagePath = await uploadImage();
+
+    // If upload fails, don't proceed
+    if (!imagePath && image) {
+      Alert.alert("Upload Failed", "Failed to upload image. Please try again.");
+      return;
+    }
+
     insertProduct(
-      { name, price: parseFloat(price), image },
+      { name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           resetValues();
@@ -166,8 +191,64 @@ const CreateProductScreen = () => {
     );
   };
 
+  // Upload image using ImageManipulator
+  const uploadImage = async () => {
+    if (!image) {
+      return null;
+    }
+
+    // If image is already a URL (not a local file), return it
+    if (!image.startsWith("file://")) {
+      return image;
+    }
+
+    try {
+      // Manipulate image to ensure it's in the right format and reduce size
+      const manipulatedImage = await ImageManipulator.manipulateAsync(
+        image,
+        [{ resize: { width: 1024 } }], // Resize to max width 1024px
+        { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
+      );
+
+      // Read the manipulated image as base64
+      const base64 = await FileSystem.readAsStringAsync(manipulatedImage.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Generate a unique filename
+      const fileExt = "jpg";
+      const fileName = `${randomUUID()}.${fileExt}`;
+      // const filePath = `public/${fileName}`;
+      const filePath = `${fileName}`;
+
+      // Upload to Supabase storage
+      const { data, error } = await supabase.storage
+        .from("product_images")
+        .upload(filePath, decode(base64), {
+          contentType: `image/${fileExt}`,
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("Upload failed:", error.message);
+        return null;
+      }
+
+      // Get the public URL
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("product_images").getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null;
+    }
+  };
+
   return (
-    <View className="p-4 flex-1 justify-start ">
+    <View className="p-4 flex-1 justify-start">
       <Stack.Screen
         options={{ title: isUpdating ? "Edit Product" : "Create Product" }}
       />
