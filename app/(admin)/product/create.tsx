@@ -23,6 +23,7 @@ import { randomUUID } from "expo-crypto";
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImageManipulator from "expo-image-manipulator";
 import { decode } from "base64-arraybuffer";
+import RemoteImage from "@/components/RemoteImage";
 
 const CreateProductScreen = () => {
   const { id: idString } = useLocalSearchParams();
@@ -263,9 +264,16 @@ const CreateProductScreen = () => {
         </TouchableOpacity>
       )}
 
-      <Image
+      {/* <Image
         source={{ uri: image || ImagePaths.defaultImage }}
         className="w-1/2 aspect-square rounded-xl self-center"
+      /> */}
+
+      <RemoteImage
+        path={image}
+        fallback={ImagePaths.defaultImage}
+        className="w-1/2 aspect-square rounded-xl self-center"
+        resizeMode="contain"
       />
 
       <TouchableOpacity onPress={pickImage} activeOpacity={0.8}>
