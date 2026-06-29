@@ -41,7 +41,7 @@ const SignUpPage = () => {
 
     Alert.alert("Account created successfully. Please proceed to login");
     setLoading(false);
-    router.push("/(auth)");
+    router.push("/(auth)/signin");
   };
 
   return (
@@ -148,7 +148,7 @@ const SignUpPage = () => {
             <View className="flex-row justify-center mt-10">
               <Text className="text-slate-500">Already have an account?</Text>
 
-              <TouchableOpacity onPress={() => router.push("/(auth)")}>
+              <TouchableOpacity onPress={() => router.push("/(auth)/signin")}>
                 <Text className="text-blue-600 font-semibold ml-1">Login</Text>
               </TouchableOpacity>
             </View>
