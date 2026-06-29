@@ -6,8 +6,9 @@ export const useInsertOrdersSubscription = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const channelName = `custom-insert-channel-${Math.random().toString(36).substring(2, 9)}`;
     const orders = supabase
-      .channel("custom-insert-channel")
+      .channel(channelName)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "orders" },
@@ -20,14 +21,15 @@ export const useInsertOrdersSubscription = () => {
     return () => {
       orders.unsubscribe(); // unsubscribe to changes on unmounting component to prevent memory leaks
     };
-  }, []);
+  }, [queryClient]);
 };
 
 export const useUpdateOrdersSubscription = (id: number) => {
   const queryClient = useQueryClient();
   useEffect(() => {
+    const channelName = `custom-filter-channel-${id}-${Math.random().toString(36).substring(2, 9)}`;
     const orders = supabase
-      .channel("custom-filter-channel")
+      .channel(channelName)
       .on(
         "postgres_changes",
         {
@@ -45,5 +47,5 @@ export const useUpdateOrdersSubscription = (id: number) => {
     return () => {
       orders.unsubscribe();
     };
-  }, []);
+  }, [id, queryClient]);
 };
