@@ -101,3 +101,30 @@ export const notifyUserAboutOrderUpdate = async (order: Tables<"orders">) => {
     sendPushNotification(token, title, body);
   }
 };
+
+const getAdminToken = async () => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("expo_push_token")
+    .eq("group", "ADMIN")
+    .single();
+
+  if (error) {
+    console.error("Error fetching admin token:", error);
+    return null;
+  }
+
+  return data?.expo_push_token;
+};
+
+export const notifyAdminAboutOrderCreation = async (
+  order: Tables<"orders">,
+) => {
+  const token = await getAdminToken();
+  const title = `New order received`;
+  const body = `New order #${order.id} has been received`;
+
+  if (token) {
+    sendPushNotification(token, title, body);
+  }
+};

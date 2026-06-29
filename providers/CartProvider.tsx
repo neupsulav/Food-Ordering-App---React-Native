@@ -5,6 +5,7 @@ import { Tables } from "@/database.types";
 import { useInsertOrder } from "@/api/orders";
 import { useRouter } from "expo-router";
 import { useInsertOrderItems } from "@/api/order-items";
+import { notifyAdminAboutOrderCreation } from "@/lib/notifications";
 
 type CartType = {
   items: CartItem[];
@@ -75,7 +76,13 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     insertOrder(
       { total },
       {
-        onSuccess: saveOrderItems,
+        onSuccess: (order) => {
+          saveOrderItems(order);
+          // send push notification to admin about new order
+          if (order) {
+            notifyAdminAboutOrderCreation(order);
+          }
+        },
       },
     );
   };
