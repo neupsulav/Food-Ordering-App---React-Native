@@ -13,6 +13,17 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
   useEffect(() => {
     if (!path) return;
 
+    // If it's a direct local URI (e.g. from ImagePicker), display it directly
+    const isLocalUri =
+      path.startsWith("file://") ||
+      path.startsWith("content://") ||
+      path.startsWith("data:");
+
+    if (isLocalUri) {
+      setImage(path);
+      return;
+    }
+
     let isMounted = true;
 
     (async () => {
